@@ -33,18 +33,12 @@ class SaveUserBackgroundInformation
         foreach($keys as $key){
             $detail = new Detail();
             $detail->key = $key;
-            if($key == "Full name"){
-                $detail->value = $user->fullName;
-            }
-            elseif($key == "Middle Initial"){
-                $detail->value = $user->fullName;
-            }
-            elseif($key == "Avatar"){
-                $detail->value = $user->photo;
-            }
-            elseif($key == "Gender"){
-                $detail->value = $user->prefixname == UserPrefixnameEnum::Mr ? 'Male' : 'Female';
-            }
+            $detail->value = match ($key) {
+                "Full name"      => $user->fullname,
+                "Middle Initial" => $user->middleInitial,
+                "Avatar"         => $user->photo,
+                "Gender"         => $user->prefixname == UserPrefixnameEnum::Mr ? 'Male' : 'Female',
+            };
             $detail->type =  'bio';
             $detail->user_id =  $user->id;
             $detail->save();
